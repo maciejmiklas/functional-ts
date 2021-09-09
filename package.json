@@ -1,0 +1,30 @@
+{
+  "name": "@maciejmiklas/functional-ts",
+  "version": "1.0.0",
+  "description": "A functional library for TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maciejmiklas/functional-ts.git"
+  },
+  "keywords": [
+    "TypeScript",
+    "functional",
+    "monad",
+    "either",
+    "toolkit",
+    "fantasy-land"
+  ],
+  "author": "Maciej Miklas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maciejmiklas/functional-ts/issues"
+  },
+  "homepage": "https://github.com/maciejmiklas/functional-ts#readme",
+  "dependencies": {
+    "ramda": "^0.27.1"
+  }
+}
