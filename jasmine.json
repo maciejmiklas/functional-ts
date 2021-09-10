@@ -7,6 +7,6 @@
       }
     }
   ],
-  "spec_dir": "src",
+  "spec_dir": "test",
   "spec_files": ["**/*spec.ts"]
 }

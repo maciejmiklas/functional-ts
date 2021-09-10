@@ -1,10 +1,13 @@
 {
   "name": "@maciejmiklas/functional-ts",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "A functional library for TypeScript",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npx webpack --config=webpack.config.js",
+    "build": "tsc",
+    "prepare" : "npm run build",
+    "prepublishOnly" : "npm test",
     "test": "jasmine-ts --config=jasmine.json"
   },
   "repository": {

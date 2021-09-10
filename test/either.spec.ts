@@ -1,4 +1,4 @@
-import {Either} from './either';
+import {Either} from '../src/either';
 
 class TwoStrings {
 	public vv: string | undefined;
@@ -289,7 +289,7 @@ describe('Either#remap', () => {
 	it('Remap from Right to Left', () => {
 		const res = Either.ofRight({vv: '123'})
 			.remap(val => Either.ofCondition(() => false, () => 'noo', () => new TwoStrings()), (v, t) => v.vv = t.vv);
-		expect(res.isLeft()).toBeTrue();
+		expect(res.isLeft()).toBeTruthy();
 	});
 
 	it('Remap from Left to Right', () => {
