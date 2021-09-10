@@ -1,5 +1,4 @@
 import * as R from 'ramda';
-import {Log} from './log';
 
 export abstract class Either<T> {
 	protected readonly val: T;
@@ -15,8 +14,7 @@ export abstract class Either<T> {
 		const all: T[] = [];
 		let cnt = 0;
 		while (val.isRight()) {
-			if (cnt > max) {
-				Log.error('Either#until', 'Iterations limit of $max reached', {max});
+			if (cnt > max) {				
 				break;
 			}
 			val.exec((v) => all.push(v));
@@ -140,15 +138,11 @@ export class Right<T> extends Either<T> {
 
 	constructor(value: T) {
 		super(value, 'Right');
-		if (R.isNil(value)) {
-			Log.error('Right#', 'null provided to Right');
-		}
 	}
 
 	assert(fn: (v: T) => Either<string>): Either<T> {
 		const resp = fn(this.val);
-		if (resp.isLeft()) {
-			Log.error('Right#assert', resp.message());
+		if (resp.isLeft()) {			
 			return Either.ofLeft(resp.message());
 		}
 		return this;

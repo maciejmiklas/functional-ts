@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Right = exports.Left = exports.Either = void 0;
 const R = require("ramda");
-const log_1 = require("./log");
 class Either {
     constructor(value, msg) {
         this.val = value;
@@ -38,7 +37,6 @@ Either.until = (next, init, max = 500) => {
     let cnt = 0;
     while (val.isRight()) {
         if (cnt > max) {
-            log_1.Log.error('Either#until', 'Iterations limit of $max reached', { max });
             break;
         }
         val.exec((v) => all.push(v));
@@ -96,14 +94,10 @@ exports.Left = Left;
 class Right extends Either {
     constructor(value) {
         super(value, 'Right');
-        if (R.isNil(value)) {
-            log_1.Log.error('Right#', 'null provided to Right');
-        }
     }
     assert(fn) {
         const resp = fn(this.val);
         if (resp.isLeft()) {
-            log_1.Log.error('Right#assert', resp.message());
             return Either.ofLeft(resp.message());
         }
         return this;
