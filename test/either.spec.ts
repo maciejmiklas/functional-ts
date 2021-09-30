@@ -1,4 +1,4 @@
-import {Either} from '../src/either';
+import {Either} from '../src';
 
 class TwoStrings {
 	public vv: string | undefined;
