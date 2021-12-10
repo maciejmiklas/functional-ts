@@ -10,11 +10,11 @@ export abstract class Either<T> {
         this.msg = msg;
     }
 
-    static setLog(enabled: boolean): void {
+    static enableLog(enabled: boolean): void {
         Either.logEnabled = enabled;
     }
 
-    static until = <T>(next: (previous: T) => Either<T>, init: Either<T>, max: number = 500): Either<T[]> => {
+    static until = <T>(next: (previous: T) => Either<T>, init: Either<T>, msg: () => string = () => 'Empty result for ' + init, max: number = 500): Either<T[]> => {
         let val = init;
         const all: T[] = [];
         let cnt = 0;
@@ -26,7 +26,7 @@ export abstract class Either<T> {
             val = next(val.get());
             cnt = cnt + 1;
         }
-        return Either.ofCondition(() => all.length > 0, () => 'Empty result for ' + init, () => all);
+        return Either.ofCondition(() => all.length > 0, msg, () => all);
     };
 
     static ofArray = <T>(...args: Either<T>[]): Either<T[]> => {
@@ -53,6 +53,11 @@ export abstract class Either<T> {
     static ofTruth<T>(truth: Either<any>[], right: () => T): Either<T> {
         const left = truth.filter(e => e.isLeft());
         return left.length === 0 ? new Right<T>(right()) : new Left(left.map(l => l.message()).join(','));
+    }
+
+    static ofTruthFlat<T>(truth: Either<any>[], func: () => Either<T>): Either<T> {
+        const truthLeft = truth.filter(e => e.isLeft());
+        return truthLeft.length === 0 ? func(): new Left(truthLeft.map(l => l.message()).join(','))
     }
 
     get(): T {
