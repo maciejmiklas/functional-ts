@@ -57,7 +57,7 @@ export abstract class Either<T> {
 
     static ofTruthFlat<T>(truth: Either<any>[], func: () => Either<T>): Either<T> {
         const truthLeft = truth.filter(e => e.isLeft());
-        return truthLeft.length === 0 ? func(): new Left(truthLeft.map(l => l.message()).join(','))
+        return truthLeft.length === 0 ? func() : new Left(truthLeft.map(l => l.message()).join(','))
     }
 
     get(): T {
@@ -68,7 +68,7 @@ export abstract class Either<T> {
         return this.msg;
     }
 
-    abstract mapGet<V>(left: (msg: string) => V, right: (v: T) => V): V;
+    abstract mapGet<VL, VR>(left: (msg: string) => VL, right: (v: T) => VR): VL | VR;
 
     abstract orElse(other: T): T;
 
@@ -98,7 +98,7 @@ export class Left<T> extends Either<T> {
         }
     }
 
-    mapGet<V>(left: (msg: string) => V, right: (v: T) => V): V {
+    mapGet<VL, VR>(left: (msg: string) => VL, right: (v: T) => VR): VL | VR {
         return left(this.msg);
     }
 
@@ -212,7 +212,7 @@ export class Right<T> extends Either<T> {
         return `Right[${this.get()}]`;
     }
 
-    mapGet<V>(left: (msg: string) => V, right: (v: T) => V): V {
+    mapGet<VL, VR>(left: (msg: string) => VL, right: (v: T) => VR): VL | VR {
         return right(this.val);
     }
 }
