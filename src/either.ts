@@ -29,7 +29,11 @@ export abstract class Either<T> {
         return Either.ofCondition(() => all.length > 0, msg, () => all);
     };
 
-    static ofArray = <T>(...args: Either<T>[]): Either<T[]> => {
+    static ofArray = <T>(array: T[], msg: () => string): Either<T[]> => {
+        return Either.ofCondition(() => !R.isNil(array) && !R.isEmpty(array), msg, () => array);
+    };
+
+    static ofEitherArray = <T>(...args: Either<T>[]): Either<T[]> => {
         const ret = args.filter(e => e.isRight()).map(e => e.get());
         return Either.ofCondition(() => ret.length > 0, () => 'All candidates for Array are Left: ' + args, () => ret);
     };

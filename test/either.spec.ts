@@ -332,19 +332,38 @@ describe('Either#remap', () => {
 });
 
 describe('Either#ofArray', () => {
+    it('Array Full', () => {
+        const res = Either.ofArray([33, 44, 55], () => 'empty?');
+        expect(res.isRight()).toBeTruthy();
+        expect(res.get()[0]).toEqual(33);
+        expect(res.get()[2]).toEqual(55);
+    });
+
+    it('Array Empty', () => {
+        const res = Either.ofArray([], () => 'empty?');
+        expect(res.isLeft()).toBeTruthy();
+    });
+
+    it('Array Null', () => {
+        const res = Either.ofArray(null, () => 'empty?');
+        expect(res.isLeft()).toBeTruthy();
+    });
+});
+
+describe('Either#ofEitherArray', () => {
     it('All Left', () => {
-        const res = Either.ofArray(Either.ofLeft('l1'), Either.ofLeft('l2'), Either.ofLeft('l3'));
+        const res = Either.ofEitherArray(Either.ofLeft('l1'), Either.ofLeft('l2'), Either.ofLeft('l3'));
         expect(res.isLeft()).toBeTruthy();
     });
 
     it('All Right', () => {
-        const res = Either.ofArray(Either.ofRight(1), Either.ofRight(10), Either.ofRight(3));
+        const res = Either.ofEitherArray(Either.ofRight(1), Either.ofRight(10), Either.ofRight(3));
         expect(res.isRight()).toBeTruthy();
         expect(res.get()).toEqual([1, 10, 3]);
     });
 
     it('Mix', () => {
-        const res = Either.ofArray(Either.ofRight(1), Either.ofLeft('l2'), Either.ofRight(10), Either.ofRight(3));
+        const res = Either.ofEitherArray(Either.ofRight(1), Either.ofLeft('l2'), Either.ofRight(10), Either.ofRight(3));
         expect(res.isRight()).toBeTruthy();
         expect(res.get()).toEqual([1, 10, 3]);
     });
@@ -380,6 +399,13 @@ describe('Either#mapGet', () => {
         const res = Either.ofRight(new OneString('right in')).mapGet(msg => TwoStrings.create(msg, 'left ret'), v => TwoStrings.create(v.vv, 'right ret'));
         expect(res.vv).toEqual('right in');
         expect(res.pp).toEqual('right ret');
+    });
+
+    it('Different Return Values', () => {
+        const res: boolean | TwoStrings = Either.ofRight(new OneString('right in')).mapGet(msg => false, v => TwoStrings.create(v.vv, 'right ret'));
+        const ts = res as TwoStrings;
+        expect(ts.vv).toEqual('right in');
+        expect(ts.pp).toEqual('right ret');
     });
 });
 
